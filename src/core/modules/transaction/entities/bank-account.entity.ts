@@ -18,6 +18,7 @@ export class BankAccount extends BaseEntity {
 
   private constructor(data: CreateBankAccountProps) {
     super(data);
+    Object.assign(this, data);
   }
 
   static createNew(
@@ -55,7 +56,7 @@ export class BankAccount extends BaseEntity {
     return this.balance;
   }
 
-  serialize() {
+  toJSON() {
     return {
       id: this.id,
       name: this.name,

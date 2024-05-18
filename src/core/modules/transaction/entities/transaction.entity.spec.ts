@@ -20,7 +20,7 @@ describe('Transaction', () => {
     describe('New', () => {
       it('Should return entity created', () => {
         expect(transaction).toBeDefined();
-        const serialized = transaction.serialize();
+        const serialized = transaction.toJSON();
         expect(serialized).toStrictEqual({
           id: expect.any(String),
           bankAccountId: expect.any(String),
@@ -65,7 +65,7 @@ describe('Transaction', () => {
       it('Should throw if bank account id is empty', () => {
         expect(() =>
           Transaction.createNew({
-            ...transaction.serialize(),
+            ...transaction.toJSON(),
             bankAccountId: '',
           })
         ).toThrowError(new DomainException('Bank account id is required'));
@@ -74,7 +74,7 @@ describe('Transaction', () => {
       it('Should throw if category id is empty', () => {
         expect(() =>
           Transaction.createNew({
-            ...transaction.serialize(),
+            ...transaction.toJSON(),
             categoryId: '',
           })
         ).toThrowError(new DomainException('Category id is required'));
@@ -84,12 +84,12 @@ describe('Transaction', () => {
     describe('From', () => {
       it('Should return entity created', () => {
         const newTransaction = Transaction.createFrom({
-          ...transaction.serialize(),
+          ...transaction.toJSON(),
           status: transactionStatus.OVERDUE,
           excluded: false,
         });
         expect(newTransaction).toBeDefined();
-        const serialized = newTransaction.serialize();
+        const serialized = newTransaction.toJSON();
         expect(serialized).toStrictEqual({
           id: expect.any(String),
           bankAccountId: expect.any(String),
@@ -111,13 +111,13 @@ describe('Transaction', () => {
     it('Should update transaction', () => {
       const newValue = 200;
       const expected = {
-        ...transaction.serialize(),
+        ...transaction.toJSON(),
         value: newValue,
       };
 
       transaction.update({ value: newValue });
 
-      const serialized = transaction.serialize();
+      const serialized = transaction.toJSON();
       expect(serialized).toStrictEqual({
         ...expected,
         updatedAt: expect.any(Date),

@@ -43,6 +43,7 @@ export class Transaction extends BaseEntity {
 
   private constructor(data: CreateTransactionProps) {
     super(data);
+    Object.assign(this, data);
     this.validate();
     this.updateStatus();
   }
@@ -102,7 +103,7 @@ export class Transaction extends BaseEntity {
     return this.description;
   }
 
-  serialize() {
+  toJSON() {
     return {
       id: this.id,
       bankAccountId: this.bankAccountId,

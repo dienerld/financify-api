@@ -1,0 +1,10 @@
+@URL=http://localhost:8080
+
+POST {{URL}}/category
+Content-Type: application/json
+
+{
+    "name": "Category 1",
+    "description": "Category 1 description",
+    "type": "INCOME"
+}

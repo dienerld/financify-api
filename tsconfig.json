@@ -24,7 +24,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "strictBindCallApply": true,
-    "target": "es2020",
+    "target": "ES2021",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -35,8 +35,8 @@
     "strict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules/**", "dist", "coverage"]
 }

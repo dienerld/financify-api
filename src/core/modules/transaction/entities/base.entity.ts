@@ -23,7 +23,7 @@ export abstract class BaseEntity {
     Object.assign(this, data);
   }
 
-  abstract serialize(): Record<string, unknown>;
+  abstract toJSON(): Record<string, unknown>;
 
   getId(): string {
     return this.id;

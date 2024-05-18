@@ -22,13 +22,14 @@ describe('Entity - Category', () => {
    */
       it('Basic Creation', () => {
         expect(category).toBeDefined();
-        const serialized = category.serialize();
+        const serialized = category.toJSON();
         expect(serialized).toStrictEqual({
           id: expect.any(String),
           name: 'Despesas Operacionais',
           description: 'Despesas operacionais da empresa',
           type: 'expense',
           disabled: false,
+          blocked: false,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         });
@@ -53,6 +54,7 @@ describe('Entity - Category', () => {
           blocked: false,
           excluded: false,
           disabled: false,
+          code: 1,
         });
 
         expect(category).toBeDefined();
@@ -181,7 +183,7 @@ describe('Entity - Category', () => {
         type: 'expense',
       });
 
-      const serialized = category.serialize();
+      const serialized = category.toJSON();
 
       expect(serialized).toEqual({
         id: expect.any(String),
@@ -189,6 +191,7 @@ describe('Entity - Category', () => {
         description: 'Despesas operacionais da empresa',
         type: 'expense',
         disabled: false,
+        blocked: false,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
