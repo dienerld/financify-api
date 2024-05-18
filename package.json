@@ -1,0 +1,25 @@
+{
+  "name": "financify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest run --config ./vitest.config.ts",
+    "test:cov": "vitest run --config ./vitest.config.ts --coverage",
+    "test:unit": "vitest --config ./vitest-unit.config.ts"
+  },
+  "keywords": [],
+  "author": "Diener Dornelas <diener.ld@outlook.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-istanbul": "^1.6.0",
+    "eslint": "^9.2.0",
+    "eslint-config-dienerld": "^1.0.9",
+    "tsx": "^4.10.4",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
