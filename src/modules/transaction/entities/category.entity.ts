@@ -40,9 +40,9 @@ export class Category extends BaseEntity {
     return new Category({
       ...data,
       id,
-      disabled: false,
       excluded: false,
       blocked: false,
+      disabled: false,
       excludedAt: undefined,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -60,24 +60,6 @@ export class Category extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  disable(): void {
-    this.throwIfExcluded();
-    this.disabled = true;
-    this.updatedAt = new Date();
-  }
-
-  enable(): void {
-    this.throwIfExcluded();
-    this.disabled = false;
-    this.updatedAt = new Date();
-  }
-
-  exclude(): void {
-    this.excluded = true;
-    this.excludedAt = new Date();
-    this.updatedAt = new Date();
-  }
-
   getName(): string {
     return this.name;
   }
@@ -90,14 +72,6 @@ export class Category extends BaseEntity {
     return this.type;
   }
 
-  isDisabled(): boolean {
-    return this.disabled;
-  }
-
-  isExcluded(): boolean {
-    return this.excluded;
-  }
-
   serialize() {
     return {
       id: this.id,
@@ -108,16 +82,5 @@ export class Category extends BaseEntity {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
-  }
-
-  private throwIfExcluded(): void {
-    if (this.excluded) {
-      throw new DomainException('Category is excluded');
-    }
-  }
-  private throwIfDisabled(): void {
-    if (this.disabled) {
-      throw new DomainException('Category is disabled');
-    }
   }
 }

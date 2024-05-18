@@ -1,5 +1,5 @@
 import { DomainException } from '../exceptions/domain.exception';
-import { Category, CategoryType } from './category.entity';
+import { Category } from './category.entity';
 
 describe('Entity - Category', () => {
   let category: Category;
@@ -51,8 +51,8 @@ describe('Entity - Category', () => {
           createdAt: new Date(),
           updatedAt: new Date(),
           blocked: false,
-          disabled: false,
           excluded: false,
+          disabled: false,
         });
 
         expect(category).toBeDefined();

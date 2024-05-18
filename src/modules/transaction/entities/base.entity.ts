@@ -1,3 +1,5 @@
+import { DomainException } from '../exceptions/domain.exception';
+
 export type BaseEntityProps = {
   id: string;
   disabled: boolean;
@@ -33,5 +35,44 @@ export abstract class BaseEntity {
 
   getUpdatedAt(): Date {
     return this.updatedAt;
+  }
+
+  isBlocked(): boolean {
+    return this.blocked;
+  }
+
+  isDisabled(): boolean {
+    return this.disabled;
+  }
+
+  isExcluded(): boolean {
+    return this.excluded;
+  }
+
+  disable(): void {
+    this.throwIfExcluded();
+    this.disabled = true;
+  }
+
+  enable(): void {
+    this.throwIfExcluded();
+    this.disabled = false;
+  }
+
+  exclude(): void {
+    this.excluded = true;
+    this.excludedAt = new Date();
+  }
+
+  throwIfDisabled(): void {
+    if (this.isDisabled()) {
+      throw new DomainException(`${this.constructor.name} is disabled`);
+    }
+  }
+
+  throwIfExcluded(): void {
+    if (this.isExcluded()) {
+      throw new DomainException(`${this.constructor.name} is excluded`);
+    }
   }
 }
