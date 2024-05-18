@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto';
 import { BaseEntity, BaseEntityProps } from './base.entity';
-import { DomainException } from '../exceptions/domain.exception';
 
 export type CategoryType = 'income' | 'expense';
 

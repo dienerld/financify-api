@@ -1,4 +1,4 @@
-import { DomainException } from '../exceptions/domain.exception';
+import { DomainException } from "@core/common/exceptions/domain.exception";
 
 export type BaseEntityProps = {
   id: string;

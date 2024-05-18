@@ -1,4 +1,4 @@
-import { DomainException } from '../exceptions/domain.exception';
+import { DomainException } from '@core/common/exceptions/domain.exception';
 import { Category } from './category.entity';
 
 describe('Entity - Category', () => {

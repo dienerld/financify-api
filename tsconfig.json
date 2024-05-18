@@ -12,9 +12,7 @@
     "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "lib": [
-      "es2020"
-    ],
+    "lib": ["es2020"],
     "module": "CommonJS",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -29,23 +27,16 @@
     "target": "es2020",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
+      "@/*": ["src/*"],
+      "@core/*": ["src/core/*"],
+      "@infra/*": ["src/infra/*"]
     },
-    "types": [
-      "vitest/globals"
-    ],
+    "types": ["vitest/globals"],
     "strict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

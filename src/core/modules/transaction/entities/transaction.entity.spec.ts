@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
+import { DomainException } from '@core/common/exceptions/domain.exception';
 import { Transaction, transactionStatus } from './transaction.entity';
-import { DomainException } from '../exceptions/domain.exception';
 
 describe('Transaction', () => {
   let transaction: Transaction;
@@ -43,6 +43,8 @@ describe('Transaction', () => {
             categoryId: randomUUID(),
             value: -100,
             description: 'Compra de produtos',
+            deadline: new Date(),
+            status: 'pending',
           })
         ).toThrowError(new DomainException('Value must be greater than 0'));
       });
@@ -54,6 +56,8 @@ describe('Transaction', () => {
             categoryId: randomUUID(),
             value: 0,
             description: 'Compra de produtos',
+            deadline: new Date(),
+            status: 'pending',
           })
         ).toThrowError(new DomainException('Value must be greater than 0'));
       });
@@ -81,6 +85,7 @@ describe('Transaction', () => {
       it('Should return entity created', () => {
         const newTransaction = Transaction.createFrom({
           ...transaction.serialize(),
+          status: transactionStatus.OVERDUE,
           excluded: false,
         });
         expect(newTransaction).toBeDefined();

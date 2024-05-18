@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
+import { DomainException } from '@core/common/exceptions/domain.exception';
 import { BaseEntity, BaseEntityProps } from './base.entity';
-import { DomainException } from '../exceptions/domain.exception';
 
 type TransactionStatus =
   | 'pending'
