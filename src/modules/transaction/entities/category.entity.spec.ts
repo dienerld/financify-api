@@ -1,6 +1,17 @@
+import { DomainException } from '../exceptions/domain.exception';
 import { Category, CategoryType } from './category.entity';
 
 describe('Entity - Category', () => {
+  let category: Category;
+
+  beforeEach(() => {
+    category = Category.createNew({
+      name: 'Despesas Operacionais',
+      description: 'Despesas operacionais da empresa',
+      type: 'expense',
+    });
+  });
+
   describe('Create', () => {
     describe('New', () => {
       /**
@@ -10,12 +21,6 @@ describe('Entity - Category', () => {
     Saída Esperada: A categoria é criada com sucesso no sistema.
    */
       it('Basic Creation', () => {
-        const category = Category.createNew({
-          name: 'Despesas Operacionais',
-          description: 'Despesas operacionais da empresa',
-          type: 'expense',
-        });
-
         expect(category).toBeDefined();
         const serialized = category.serialize();
         expect(serialized).toStrictEqual({
@@ -23,6 +28,7 @@ describe('Entity - Category', () => {
           name: 'Despesas Operacionais',
           description: 'Despesas operacionais da empresa',
           type: 'expense',
+          disabled: false,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
         });
@@ -44,6 +50,9 @@ describe('Entity - Category', () => {
           type: 'expense',
           createdAt: new Date(),
           updatedAt: new Date(),
+          blocked: false,
+          disabled: false,
+          excluded: false,
         });
 
         expect(category).toBeDefined();
@@ -58,108 +67,114 @@ describe('Entity - Category', () => {
   });
 
   describe('Update', () => {
-    /**
-     * Teste de Atualização:
-     * Descrição: Verifica se é possível atualizar os dados de uma categoria.
-     * Entrada: Categoria válida, Novos dados da categoria.
-     * Saída Esperada: Os dados da categoria são atualizados corretamente.
-     */
-    it('All properties', () => {
-      const category = Category.createNew({
-        name: 'Despesas Operacionais',
-        description: 'Despesas operacionais da empresa',
-        type: 'expense',
+    describe('Properties', () => {
+      it('Should update all properties', () => {
+        category.update({
+          name: 'Despesas Fixas',
+          description: 'Despesas fixas da empresa',
+          type: 'expense',
+        });
+
+        expect(category.getName()).toBe('Despesas Fixas');
+        expect(category.getDescription()).toBe('Despesas fixas da empresa');
       });
 
-      category.update({
-        name: 'Despesas Fixas',
-        description: 'Despesas fixas da empresa',
-        type: 'expense',
+      it('Should update only property type', () => {
+        category.update({
+          type: 'income',
+        });
+
+        expect(category.getType()).toBe('income');
+        expect(category.getName()).toBe('Despesas Operacionais');
+        expect(category.getDescription()).toBe(
+          'Despesas operacionais da empresa'
+        );
       });
 
-      expect(category.getName()).toBe('Despesas Fixas');
-      expect(category.getDescription()).toBe('Despesas fixas da empresa');
+      it('Should update only property name', () => {
+        category.update({
+          name: 'Despesas Fixas',
+        });
+
+        expect(category.getName()).toBe('Despesas Fixas');
+        expect(category.getDescription()).toBe(
+          'Despesas operacionais da empresa'
+        );
+        expect(category.getType()).toBe('expense');
+      });
+
+      it('Should update only property description', () => {
+        category.update({
+          description: 'Despesas fixas da empresa',
+        });
+
+        expect(category.getName()).toBe('Despesas Operacionais');
+        expect(category.getDescription()).toBe('Despesas fixas da empresa');
+        expect(category.getType()).toBe('expense');
+      });
+
+      it('Should return erro when try update any property when category disabled', () => {
+        category.disable();
+
+        expect(() =>
+          category.update({
+            name: 'Despesas Fixas',
+          })
+        ).toThrowError(new DomainException('Category is disabled'));
+      });
+
+      it('Should return erro when try update any property when category excluded', () => {
+        category.exclude();
+
+        expect(() =>
+          category.update({
+            name: 'Despesas Fixas',
+          })
+        ).toThrowError(new DomainException('Category is excluded'));
+      });
     });
 
-    /**
-     * Teste de Atualização - Tipo:
-     * Descrição: Verifica se é possível atualizar o tipo de uma categoria.
-     * Entrada: Categoria válida, Novo tipo da categoria.
-     * Saída Esperada: O tipo da categoria é atualizado corretamente.
-     */
-    it('Type', () => {
-      const category = Category.createNew({
-        name: 'Despesas Operacionais',
-        description: 'Despesas operacionais da empresa',
-        type: 'expense',
+    describe('Status', () => {
+      it('Should disable category', () => {
+        category.disable();
+
+        expect(category.isDisabled()).toBeTruthy();
       });
 
-      category.update({
-        type: 'income',
+      it('Should enable category', () => {
+        category.disable();
+        category.enable();
+
+        expect(category.isDisabled()).toBeFalsy();
       });
 
-      expect(category.getType()).toBe('income');
-      expect(category.getName()).toBe('Despesas Operacionais');
-      expect(category.getDescription()).toBe(
-        'Despesas operacionais da empresa'
-      );
-    });
+      it('Should exclude category', () => {
+        category.exclude();
 
-    /**
-     * Teste de Atualização - Nome:
-     * Descrição: Verifica se é possível atualizar o nome de uma categoria.
-     * Entrada: Categoria válida, Novo nome da categoria.
-     * Saída Esperada: O nome da categoria é atualizado corretamente.
-     */
-    it('Name', () => {
-      const category = Category.createNew({
-        name: 'Despesas Operacionais',
-        description: 'Despesas operacionais da empresa',
-        type: 'expense',
+        expect(category.isExcluded()).toBeTruthy();
       });
 
-      category.update({
-        name: 'Despesas Fixas',
+      it('Should return erro when try disable category when category excluded', () => {
+        category.exclude();
+
+        expect(() => category.disable()).toThrowError(
+          new DomainException('Category is excluded')
+        );
       });
 
-      expect(category.getName()).toBe('Despesas Fixas');
-      expect(category.getDescription()).toBe(
-        'Despesas operacionais da empresa'
-      );
-      expect(category.getType()).toBe('expense');
-    });
+      it('Should return erro when try enable category when category excluded', () => {
+        category.disable();
+        category.exclude();
 
-    /**
-     * Teste de Atualização - Descrição:
-     * Descrição: Verifica se é possível atualizar a descrição de uma categoria.
-     * Entrada: Categoria válida, Nova descrição da categoria.
-     * Saída Esperada: A descrição da categoria é atualizada corretamente.
-     */
-    it('Description', () => {
-      const category = Category.createNew({
-        name: 'Despesas Operacionais',
-        description: 'Despesas operacionais da empresa',
-        type: 'expense',
+        expect(() => category.enable()).toThrowError(
+          new DomainException('Category is excluded')
+        );
       });
-
-      category.update({
-        description: 'Despesas fixas da empresa',
-      });
-
-      expect(category.getName()).toBe('Despesas Operacionais');
-      expect(category.getDescription()).toBe('Despesas fixas da empresa');
-      expect(category.getType()).toBe('expense');
     });
   });
 
   describe('Serialize', () => {
-    /**
-     * Teste de Serialização:
-     * Descrição: Verifica se é possível serializar os dados de uma categoria.
-     * Entrada: Categoria válida.
-     * Saída Esperada: Os dados da categoria são serializados corretamente.
-     */
-    it('Serialize', () => {
+    it('Should return all properties serialized', () => {
       const category = Category.createNew({
         name: 'Despesas Operacionais',
         description: 'Despesas operacionais da empresa',
@@ -173,6 +188,7 @@ describe('Entity - Category', () => {
         name: 'Despesas Operacionais',
         description: 'Despesas operacionais da empresa',
         type: 'expense',
+        disabled: false,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
