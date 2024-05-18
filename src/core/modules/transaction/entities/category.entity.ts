@@ -42,7 +42,7 @@ export class Category extends BaseEntity {
   }
 
   static createFrom(
-    data: Omit<Required<CategoryEntityProps>, 'excludedAt'>
+    data: Omit<Required<CategoryEntityProps>, 'excludedAt'>,
   ): Category {
     return new Category(data);
   }
@@ -77,12 +77,12 @@ export class Category extends BaseEntity {
   toJSON() {
     return {
       id: this.id,
+      code: this.code,
       name: this.name,
       description: this.description,
-      code: this.code,
       type: this.type,
-      blocked: this.blocked,
       disabled: this.disabled,
+      blocked: this.blocked,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

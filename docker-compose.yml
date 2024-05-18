@@ -1,0 +1,44 @@
+name: financify-api
+
+services:
+  api:
+    image: financify-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - financify-network
+
+  db:
+    image: postgres:13-alpine
+    container_name: financify-db
+    environment:
+      POSTGRES_USER: financify
+      POSTGRES_PASSWORD: financify
+      POSTGRES_DB: financify
+    ports:
+      - '5432:5432'
+    volumes:
+      - .docker/financify-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U financify']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - financify-network
+
+networks:
+  financify-network:
+    driver: bridge

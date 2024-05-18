@@ -1,5 +1,8 @@
 {
   "extends": [
     "dienerld/node"
-  ]
+  ],
+  "rules": {
+    "no-useless-constructor": "off"
+  }
 }

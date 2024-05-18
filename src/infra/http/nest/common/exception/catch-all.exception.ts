@@ -1,15 +1,10 @@
-import {
-  PersistenceClientException,
-  PersistenceException,
-} from '@/infra/database/in-memory/exception/client.exception';
+import { PersistenceException } from '@/infra/database/in-memory/exception/client.exception';
 import {
   ArgumentsHost,
   ExceptionFilter,
-  HttpCode,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { STATUS_CODES } from 'http';
 
 export class CatchAllException implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
@@ -39,6 +34,7 @@ export class CatchAllException implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
+      invalidFields: exception.response?.invalidFields,
     });
   }
 }
