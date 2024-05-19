@@ -2,7 +2,7 @@ import { BaseRepository } from '@/core/modules/transaction/persistence/repositor
 import {
   PersistenceClientException,
   PersistenceException,
-} from './exception/client.exception';
+} from '../exception/client.exception';
 
 export abstract class BaseInMemoryRepository implements BaseRepository {
   handleAndThrowError(error: unknown): never {

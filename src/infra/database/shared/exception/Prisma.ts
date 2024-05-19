@@ -2,7 +2,7 @@ import { DomainException } from '@/core/common/exceptions/domain.exception';
 import {
   PersistenceClientException,
   PersistenceInternalException,
-} from '../../in-memory/exception/client.exception';
+} from '../../exception/client.exception';
 
 export abstract class DefaultPrismaRepository {
   protected handleAndThrowError(error: unknown): never {

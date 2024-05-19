@@ -1,4 +1,4 @@
-import { PersistenceException } from '@/infra/database/in-memory/exception/client.exception';
+import { PersistenceException } from '@/infra/database/exception/client.exception';
 import {
   ArgumentsHost,
   ExceptionFilter,

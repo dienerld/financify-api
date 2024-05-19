@@ -17,6 +17,7 @@ model Category {
   id          String  @id @default(uuid()) @db.Uuid
   code        Int     @unique @default(autoincrement())
   name        String  @unique
+  type        CategoryType
   description String
   disabled    Boolean @default(false)
   excluded    Boolean @default(false)
@@ -27,4 +28,9 @@ model Category {
   excludedAt DateTime?
 
   @@index([code])
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
 }

@@ -1,8 +1,12 @@
+-- CreateEnum
+CREATE TYPE "CategoryType" AS ENUM ('INCOME', 'EXPENSE');
+
 -- CreateTable
 CREATE TABLE "Category" (
     "id" UUID NOT NULL,
     "code" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "type" "CategoryType" NOT NULL,
     "description" TEXT NOT NULL,
     "disabled" BOOLEAN NOT NULL DEFAULT false,
     "excluded" BOOLEAN NOT NULL DEFAULT false,

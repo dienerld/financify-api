@@ -41,9 +41,7 @@ export class Category extends BaseEntity {
     });
   }
 
-  static createFrom(
-    data: Omit<Required<CategoryEntityProps>, 'excludedAt'>,
-  ): Category {
+  static createFrom(data: CategoryEntityProps & { code: number }): Category {
     return new Category(data);
   }
 

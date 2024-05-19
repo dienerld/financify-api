@@ -1,7 +1,7 @@
 import { Category } from '@/core/modules/transaction/entities/category.entity';
 import { CategoryRepository } from '@/core/modules/transaction/persistence/repository/category.interface';
 import { BaseInMemoryRepository } from './base-in-memory.repository';
-import { PersistenceNotFoundException } from './exception/client.exception';
+import { PersistenceNotFoundException } from '../exception/client.exception';
 
 export class InMemoryCategoryRepository
   extends BaseInMemoryRepository
