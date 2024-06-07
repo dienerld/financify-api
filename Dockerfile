@@ -12,13 +12,13 @@ COPY --chown=node:node package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
-COPY --chown=node:node . .
-
 ## Development image
 FROM base as development
 
+COPY --chown=node:node . .
+
 ## Build image
-FROM base as build
+FROM development as build
 ENV NODE_ENV=production
 
 RUN yarn test && yarn build

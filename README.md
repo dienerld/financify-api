@@ -48,6 +48,7 @@ Para aplicar os conceitos de DDD será utilizado TDD (Test-Driven Development) p
 - Node.js
 - TypeScript
 - Vitest
+- NestJs
 
 ---
 

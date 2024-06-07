@@ -6,4 +6,4 @@ export interface CategoryRepository {
   findOne(value: string | number): Promise<Category>;
 }
 
-export const CategoryRepository = Symbol('CATEGORY_REPOSITORY');
+export const CategoryRepositoryKey = Symbol('CATEGORY_REPOSITORY');

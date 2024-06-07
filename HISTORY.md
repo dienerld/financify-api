@@ -1,0 +1,7 @@
+# Histórico de desenvolvimento
+
+## 2024-06-06
+
+Ajustado documentação para ser feita de forma manual usando decorators do swagger para facilitar o desenvolvimento e conseguir documentar da melhor forma os endpoints da api. Ao não usar o plugin de CLI eu consigo passar as propriedades com explicações e exemplos para cada parte, além de omitir entidades que não são públicas.
+
+Foi adicionado middleware de autenticação para proteger as rotas de forma global, ainda não está completo, no momento não é feito validação de usuário nem de tokens, apenas autoriza ou rejeita de forma randômica as requisições.

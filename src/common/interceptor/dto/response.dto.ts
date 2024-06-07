@@ -1,24 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiResponseProperty } from '@nestjs/swagger';
 
-export class CustomResponseDto {
-  @ApiProperty({
-    name: 'status',
+export abstract class CustomResponseDto<T = unknown> {
+  @ApiResponseProperty({
     type: Boolean,
     example: true,
   })
   success: boolean;
 
-  @ApiProperty({
-    name: 'code',
+  @ApiResponseProperty({
     type: Number,
     example: 200,
   })
   code: number;
 
-  @ApiProperty({
-    name: 'data',
-    type: Object,
-    example: {},
-  })
-  data: any;
+  abstract data: T;
 }

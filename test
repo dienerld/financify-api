@@ -1,0 +1,18 @@
+"plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+
+          "dtoFileNameSuffix": [
+            ".dto.ts"
+          ]
+        }
+      }
+    ],
+
+    "builder": {
+      "type": "swc",
+      "options": {
+        "swcrcPath": "./.swcrc"
+      }
+    }

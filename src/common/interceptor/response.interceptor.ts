@@ -21,7 +21,7 @@ export class CustomResponseInterceptor<T>
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<CustomResponseDto> {
+  ): Observable<CustomResponseDto<T>> {
     const res = context.switchToHttp().getResponse();
 
     return next.handle().pipe(

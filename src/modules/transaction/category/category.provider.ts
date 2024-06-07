@@ -1,6 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { PrismaService } from '@common/prisma/prisma.service';
-import { CategoryRepository } from './core/persistence/repository';
+import {
+  CategoryRepository,
+  CategoryRepositoryKey,
+} from './core/persistence/repository';
 import { CategoryService } from './core/services';
 import { PrismaCategoryRepository } from './persistence/repositories/category.repository';
 
@@ -10,7 +13,7 @@ import { PrismaCategoryRepository } from './persistence/repositories/category.re
 // };
 
 const PrismaDbProvider: Provider = {
-  provide: CategoryRepository,
+  provide: CategoryRepositoryKey,
   useFactory: (prismaService: PrismaService) =>
     new PrismaCategoryRepository(prismaService),
   inject: [PrismaService],
@@ -24,6 +27,6 @@ export const categoryProviders = [
     provide: CategoryService.name,
     useFactory: (categoryRepository: CategoryRepository) =>
       new CategoryService(categoryRepository),
-    inject: [CategoryRepository],
+    inject: [CategoryRepositoryKey],
   },
 ];
