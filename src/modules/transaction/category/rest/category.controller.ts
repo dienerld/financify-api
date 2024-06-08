@@ -8,17 +8,18 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { ApiResponseUnauthorized } from '@/common/docs/unauthorized.decorator';
+import { ApiResponseServerError } from '@/common/docs/internal-error.decorator';
+import { ApiResponseBadRequest } from '@/common/docs/bad-request.decorator';
+import { tags } from '@config/docs/tags';
+
+import { CategoryService } from '../core/services';
 import { CreateCategoryDto } from './dto/input.dto';
 import {
   CategoryDto,
   SchemaResponseCategory,
   SchemaResponseCategoryList,
 } from './dto/output.dto';
-import { tags } from '../../../../config/docs/tags';
-import { CategoryService } from '../core/services';
-import { ApiResponseUnauthorized } from '@/common/docs/unauthorized.decorator';
-import { ApiResponseServerError } from '@/common/docs/internal-error.decorator';
-import { ApiResponseBadRequest } from '@/common/docs/bad-request.decorator';
 
 @Controller('category')
 @ApiTags(tags.Category)

@@ -30,6 +30,7 @@
       "@/*": ["src/*"],
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
+      "@config/*": ["src/config/*"],
     },
     "types": ["vitest/globals"],
     "strict": true,

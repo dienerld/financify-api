@@ -13,15 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         String    @id @db.VarChar()
+  email      String    @unique
+  name       String?
+  password   String
+  disabled   Boolean   @default(false)
+  blocked    Boolean   @default(false)
+  excluded   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  excludedAt DateTime?
+}
+
 model Category {
-  id          String  @id @default(uuid()) @db.Uuid
-  code        Int     @unique @default(autoincrement())
-  name        String  @unique
+  id          String       @id @db.VarChar()
+  code        Int          @unique @default(autoincrement())
+  name        String       @unique
   type        CategoryType
   description String
-  disabled    Boolean @default(false)
-  excluded    Boolean @default(false)
-  blocked     Boolean @default(false)
+  disabled    Boolean      @default(false)
+  excluded    Boolean      @default(false)
+  blocked     Boolean      @default(false)
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

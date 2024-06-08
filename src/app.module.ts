@@ -5,9 +5,10 @@ import { CatchAllException } from './common/exception/catch-all.exception';
 import { CustomResponseInterceptor } from './common/interceptor/response.interceptor';
 import { ClassValidatorPipe } from './common/pipes/validation.pipe';
 import { AuthModule } from './common/auth/auth.module';
+import { UsersModule } from './modules/identity/users/users.module';
 
 @Module({
-  imports: [TransactionModule, AuthModule],
+  imports: [TransactionModule, AuthModule, UsersModule],
   providers: [
     {
       provide: APP_FILTER,

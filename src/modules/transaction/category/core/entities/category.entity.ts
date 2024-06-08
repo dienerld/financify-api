@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
-import { BaseEntity, BaseEntityProps } from './base.entity';
+
+import { BaseEntity, BaseEntityProps } from '@/common/base/base.entity';
 
 export type CategoryType = 'income' | 'expense';
 

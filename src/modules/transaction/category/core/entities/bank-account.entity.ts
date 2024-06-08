@@ -1,5 +1,6 @@
-import { randomUUID } from 'crypto';
-import { BaseEntity, BaseEntityProps } from './base.entity';
+import { ulid } from 'ulid';
+
+import { BaseEntity, BaseEntityProps } from '@/common/base/base.entity';
 
 interface BankAccountEntityProps {
   name: string;
@@ -24,7 +25,7 @@ export class BankAccount extends BaseEntity {
   static createNew(
     data: Omit<CreateBankAccountProps, 'id' | 'createdAt' | 'updatedAt'>,
   ): BankAccount {
-    const id = randomUUID();
+    const id = ulid();
     return new BankAccount({
       ...data,
       id,

@@ -1,5 +1,5 @@
-import { Category, CreateCategoryProps } from '../entities/category.entity';
-import { CategoryRepository } from '../persistence/repository/category.interface';
+import { Category, CreateCategoryProps } from '../entities';
+import { CategoryRepository } from '../persistence/repository';
 
 export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {}

@@ -22,11 +22,13 @@ describe('Entity - Category', () => {
    */
       it('Basic Creation', () => {
         expect(category).toBeDefined();
+        category.assignCode(1);
         const serialized = category.toJSON();
         expect(serialized).toStrictEqual({
           id: expect.any(String),
           name: 'Despesas Operacionais',
           description: 'Despesas operacionais da empresa',
+          code: 1,
           type: 'expense',
           disabled: false,
           blocked: false,
