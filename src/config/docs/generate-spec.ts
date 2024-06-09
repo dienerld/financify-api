@@ -5,8 +5,7 @@ export function generateOpenApiSpec(document: DocumentBuilder) {
   document
     .setTitle('Financify API Documentation')
     .setDescription('The Financify API Documentation')
-    .setVersion('0.0.1')
-    .addCookieAuth('authorization');
+    .setVersion('0.0.1');
 
   const sortedTags = Object.entries(tags)
     .map(([, value]) => value)

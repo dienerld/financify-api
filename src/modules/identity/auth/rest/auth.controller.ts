@@ -71,11 +71,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'logout',
   })
-  logout(
-    @Res({ passthrough: true }) res: Response,
-    @Query('userId') userId: string,
-  ) {
-    const cookieName = `auth_${userId}`;
-    res.clearCookie(cookieName);
+  async logout(@Query('userId') userId: string) {
+    await this.authService.logout(userId);
   }
 }

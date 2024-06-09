@@ -5,14 +5,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './core/auth.guard';
 import { AuthProviders } from './auth.provider';
 import { AuthController } from './rest/auth.controller';
+import { RedisModule } from '@/database/redis/redis.module';
 
 @Module({
   imports: [
     ConfigModule,
+    RedisModule,
     JwtModule.register({
       global: true,
       secret: 'const',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '2h' },
     }),
   ],
   controllers: [AuthController],

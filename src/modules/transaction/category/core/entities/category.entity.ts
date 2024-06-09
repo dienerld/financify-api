@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { ulid } from 'ulid';
 
 import { BaseEntity, BaseEntityProps } from '@/common/base/base.entity';
 
@@ -28,7 +28,7 @@ export class Category extends BaseEntity {
   }
 
   static createNew(data: CreateCategoryProps): Category {
-    const id = randomUUID();
+    const id = ulid();
 
     return new Category({
       id,

@@ -31,7 +31,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - .docker/financify-db-data:/var/lib/postgresql/data
+      - ../.docker/financify-db-data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U financify']
       interval: 5s

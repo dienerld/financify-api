@@ -52,4 +52,36 @@ Para aplicar os conceitos de DDD será utilizado TDD (Test-Driven Development) p
 
 ---
 
+## Instalação
+
+Para instalar o projeto, siga os passos abaixo:
+
+1. Clone o repositório
+
+```bash
+git clone
+```
+
+2. Instale as dependências
+
+```bash
+yarn
+```
+
+3. Inicie o banco de dados
+
+```bash
+docker-compose up
+```
+
+Os arquivos do banco de dados serão salvos em uma pasta chamada .docker/financify-db-data em um diretório anterior a pasta atual do projeto. Isto acontece devido ao uso do sonarQube para análise de código, pois o mesmo estava gerando um erro ao tentar analisar a pasta .docker/financify-db-data por questões de permissões.
+
+4. Inicie o servidor
+
+```bash
+yarn dev
+```
+
+---
+
 Desenvolvido por [Diener Dornelas](https://github.com/dienerld)
