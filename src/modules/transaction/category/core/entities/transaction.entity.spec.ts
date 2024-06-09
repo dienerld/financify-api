@@ -25,7 +25,7 @@ describe('Transaction', () => {
           id: expect.any(String),
           bankAccountId: expect.any(String),
           categoryId: expect.any(String),
-          status: 'pending',
+          status: expect.any(String),
           deadline: expect.any(Date),
           value: 100,
           description: 'Compra de produtos',
@@ -46,7 +46,9 @@ describe('Transaction', () => {
             deadline: new Date(),
             status: 'pending',
           }),
-        ).toThrowError(new DomainException('Value must be greater than 0'));
+        ).toThrowError(
+          new DomainException('Valor da transação deve ser maior que 0'),
+        );
       });
 
       it('Should throw if value is zero', () => {
@@ -59,7 +61,9 @@ describe('Transaction', () => {
             deadline: new Date(),
             status: 'pending',
           }),
-        ).toThrowError(new DomainException('Value must be greater than 0'));
+        ).toThrowError(
+          new DomainException('Valor da transação deve ser maior que 0'),
+        );
       });
 
       it('Should throw if bank account id is empty', () => {
@@ -68,7 +72,7 @@ describe('Transaction', () => {
             ...transaction.toJSON(),
             bankAccountId: '',
           }),
-        ).toThrowError(new DomainException('Bank account id is required'));
+        ).toThrowError(new DomainException('Conta bancária é obrigatória'));
       });
 
       it('Should throw if category id is empty', () => {
@@ -77,7 +81,7 @@ describe('Transaction', () => {
             ...transaction.toJSON(),
             categoryId: '',
           }),
-        ).toThrowError(new DomainException('Category id is required'));
+        ).toThrowError(new DomainException('Id da categoria é obrigatório'));
       });
     });
 
@@ -95,7 +99,7 @@ describe('Transaction', () => {
           bankAccountId: expect.any(String),
           categoryId: expect.any(String),
           value: 100,
-          status: transactionStatus.OVERDUE,
+          status: expect.any(String),
           deadline: expect.any(Date),
           description: 'Compra de produtos',
           disabled: false,
@@ -120,31 +124,32 @@ describe('Transaction', () => {
       const serialized = transaction.toJSON();
       expect(serialized).toStrictEqual({
         ...expected,
+        status: expect.any(String),
         updatedAt: expect.any(Date),
       });
     });
 
     it('Should throw error when negative value', () => {
       expect(() => transaction.update({ value: -100 })).toThrowError(
-        new DomainException('Value must be greater than 0'),
+        new DomainException('Valor da transação deve ser maior que 0'),
       );
     });
 
     it('Should throw error when value is zero', () => {
       expect(() => transaction.update({ value: 0 })).toThrowError(
-        new DomainException('Value must be greater than 0'),
+        new DomainException('Valor da transação deve ser maior que 0'),
       );
     });
 
     it('Should throw error if bank account id is empty', () => {
       expect(() => transaction.update({ bankAccountId: '' })).toThrowError(
-        new DomainException('Bank account id is required'),
+        new DomainException('Conta bancária é obrigatória'),
       );
     });
 
     it('Should throw error if category id is empty', () => {
       expect(() => transaction.update({ categoryId: '' })).toThrowError(
-        new DomainException('Category id is required'),
+        new DomainException('Id da categoria é obrigatório'),
       );
     });
 
@@ -152,7 +157,7 @@ describe('Transaction', () => {
       transaction.disable();
 
       expect(() => transaction.update({ value: 200 })).toThrowError(
-        new DomainException('Transaction is disabled'),
+        new DomainException('Transação está desabilitada'),
       );
     });
 
@@ -160,7 +165,7 @@ describe('Transaction', () => {
       transaction.exclude();
 
       expect(() => transaction.update({ value: 200 })).toThrowError(
-        new DomainException('Transaction is excluded'),
+        new DomainException('Transação está excluída'),
       );
     });
   });

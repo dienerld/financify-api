@@ -124,7 +124,7 @@ describe('Entity - Category', () => {
           category.update({
             name: 'Despesas Fixas',
           }),
-        ).toThrowError(new DomainException('Category is disabled'));
+        ).toThrowError(new DomainException('Categoria está desabilitada'));
       });
 
       it('Should return erro when try update any property when category excluded', () => {
@@ -134,7 +134,7 @@ describe('Entity - Category', () => {
           category.update({
             name: 'Despesas Fixas',
           }),
-        ).toThrowError(new DomainException('Category is excluded'));
+        ).toThrowError(new DomainException('Categoria está excluída'));
       });
     });
 
@@ -162,7 +162,7 @@ describe('Entity - Category', () => {
         category.exclude();
 
         expect(() => category.disable()).toThrowError(
-          new DomainException('Category is excluded'),
+          new DomainException('Categoria está excluída'),
         );
       });
 
@@ -171,7 +171,7 @@ describe('Entity - Category', () => {
         category.exclude();
 
         expect(() => category.enable()).toThrowError(
-          new DomainException('Category is excluded'),
+          new DomainException('Categoria está excluída'),
         );
       });
     });

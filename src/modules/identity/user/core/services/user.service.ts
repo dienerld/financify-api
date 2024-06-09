@@ -29,6 +29,12 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    return this.userRepository.findOne(id);
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) {
+      throw new PersistenceBadRequestException('User not found');
+    }
+
+    return user;
   }
 }

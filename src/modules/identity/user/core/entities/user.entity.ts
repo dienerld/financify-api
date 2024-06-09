@@ -16,7 +16,7 @@ export class User extends BaseEntity {
   private password: CreateUserProps['password'];
 
   private constructor(data: UserEntityProps) {
-    super(data);
+    super(data, 'Usuário');
     Object.assign(this, data);
   }
 
@@ -38,8 +38,14 @@ export class User extends BaseEntity {
     return new User(data);
   }
 
-  update(data: Partial<UserEntityProps>): void {
+  update(data: Omit<Partial<CreateUserProps>, 'password'>): void {
+    this.throwIfExcluded();
+    this.throwIfDisabled();
     Object.assign(this, data);
+  }
+
+  changePassword(password: string): void {
+    this.password = password;
   }
 
   getName(): UserEntityProps['name'] {
@@ -60,7 +66,6 @@ export class User extends BaseEntity {
       name: this.name,
       email: this.email,
       disabled: this.disabled,
-      excluded: this.excluded,
       blocked: this.blocked,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

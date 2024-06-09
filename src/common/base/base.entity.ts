@@ -18,9 +18,22 @@ export abstract class BaseEntity {
   protected createdAt: BaseEntityProps['createdAt'];
   protected updatedAt: BaseEntityProps['updatedAt'];
   protected excludedAt?: BaseEntityProps['excludedAt'];
+  private readonly displayName: string;
+  private readonly genre: '0' | '1';
 
-  constructor(data: BaseEntityProps) {
+  /**
+   * @param data
+   * @param displayName Display name of the entity
+   * @param genre '0' for masculine and '1' for feminine
+   */
+  constructor(
+    data: BaseEntityProps,
+    displayName: string,
+    genre: '0' | '1' = '0',
+  ) {
     Object.assign(this, data);
+    this.displayName = displayName;
+    this.genre = genre;
   }
 
   abstract toJSON(): Record<string, unknown>;
@@ -66,13 +79,19 @@ export abstract class BaseEntity {
 
   throwIfDisabled(): void {
     if (this.isDisabled()) {
-      throw new DomainException(`${this.constructor.name} is disabled`);
+      const disabled = this.genre === '0' ? 'desabilitado' : 'desabilitada';
+      throw new DomainException(
+        `${this.displayName || this.constructor.name} está ${disabled}`,
+      );
     }
   }
 
   throwIfExcluded(): void {
     if (this.isExcluded()) {
-      throw new DomainException(`${this.constructor.name} is excluded`);
+      const excluded = this.genre === '0' ? 'excluído' : 'excluída';
+      throw new DomainException(
+        `${this.displayName || this.constructor.name} está ${excluded}`,
+      );
     }
   }
 }

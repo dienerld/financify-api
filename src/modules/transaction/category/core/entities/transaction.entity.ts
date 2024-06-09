@@ -42,24 +42,13 @@ export class Transaction extends BaseEntity {
   private description: TransactionEntityProps['description'];
 
   private constructor(data: CreateTransactionProps) {
-    super(data);
+    super(data, 'Transação', '1');
     Object.assign(this, data);
     this.validate();
     this.updateStatus();
   }
 
-  static createNew(
-    data: Omit<
-      CreateTransactionProps,
-      | 'id'
-      | 'createdAt'
-      | 'updatedAt'
-      | 'excluded'
-      | 'blocked'
-      | 'excludedAt'
-      | 'disabled'
-    >,
-  ): Transaction {
+  static createNew(data: TransactionEntityProps): Transaction {
     const id = randomUUID();
 
     return new Transaction({
@@ -121,15 +110,15 @@ export class Transaction extends BaseEntity {
 
   private validate() {
     if (this.value <= 0) {
-      throw new DomainException('Value must be greater than 0');
+      throw new DomainException('Valor da transação deve ser maior que 0');
     }
 
     if (!this.bankAccountId || this.bankAccountId.trim() === '') {
-      throw new DomainException('Bank account id is required');
+      throw new DomainException('Conta bancária é obrigatória');
     }
 
     if (!this.categoryId || this.categoryId.trim() === '') {
-      throw new DomainException('Category id is required');
+      throw new DomainException('Id da categoria é obrigatório');
     }
   }
 

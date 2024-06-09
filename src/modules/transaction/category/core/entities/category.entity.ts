@@ -23,7 +23,7 @@ export class Category extends BaseEntity {
   private type: CategoryEntityProps['type'];
 
   private constructor(data: CategoryEntityProps) {
-    super(data);
+    super(data, 'Categoria', '1');
     Object.assign(this, data);
   }
 
