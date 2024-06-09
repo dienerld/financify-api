@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class SignInDto {
   @ApiProperty({
@@ -9,7 +8,8 @@ export class SignInDto {
     description: 'User email',
     example: 'example@mail.com',
   })
-  @IsEmail()
+  @IsEmail(undefined, { message: 'Email inválido' })
+  @IsString({ message: 'Email é obrigatório' })
   email: string;
 
   @ApiProperty({
@@ -18,16 +18,6 @@ export class SignInDto {
     description: 'User password',
     example: 'password',
   })
-  @IsString()
+  @IsString({ message: 'Senha é obrigatória' })
   password: string;
-
-  @ApiProperty({
-    name: 'remember',
-    type: Boolean,
-    description: 'Remember user session',
-    example: false,
-  })
-  @Type(() => Boolean)
-  @IsBoolean()
-  remember: boolean;
 }

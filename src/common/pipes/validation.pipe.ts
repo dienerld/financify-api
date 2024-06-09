@@ -20,7 +20,7 @@ export class ClassValidatorPipe {
           message: string;
         } = {
           invalidFields: [],
-          message: 'There are invalid fields in the request',
+          message: 'Falha na validação dos campos',
         };
 
         // @ts-expect-error - não é possível tipar o retorno de forma correta

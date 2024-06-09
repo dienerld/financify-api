@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { CreateUserProps } from '../../core/entities';
 
 export class CreateUserDto implements CreateUserProps {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Nome inválido' })
+  @IsNotEmpty({ message: 'Nome é obrigatório' })
   @ApiProperty({
     name: 'name',
     type: String,
@@ -13,8 +13,9 @@ export class CreateUserDto implements CreateUserProps {
   })
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Email inválido' })
+  @IsEmail(undefined, { message: 'Email inválido' })
+  @IsNotEmpty({ message: 'Email é obrigatório' })
   @ApiProperty({
     name: 'email',
     type: String,
@@ -22,8 +23,8 @@ export class CreateUserDto implements CreateUserProps {
   })
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Senha inválida' })
+  @IsNotEmpty({ message: 'Senha é obrigatória' })
   @ApiProperty({
     name: 'password',
     type: String,

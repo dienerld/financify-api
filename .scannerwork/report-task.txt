@@ -2,5 +2,5 @@ projectKey=Financify
 serverUrl=http://localhost:9000
 serverVersion=10.5.0.89998
 dashboardUrl=http://localhost:9000/dashboard?id=Financify
-ceTaskId=f0fbf625-f742-41ab-9faa-79c44b44ccf3
-ceTaskUrl=http://localhost:9000/api/ce/task?id=f0fbf625-f742-41ab-9faa-79c44b44ccf3
+ceTaskId=09c0a7d8-eb61-4b8d-8644-a43a2ae3e7b0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=09c0a7d8-eb61-4b8d-8644-a43a2ae3e7b0

@@ -29,6 +29,8 @@ export class CatchAllException implements ExceptionFilter {
       message = exception.message || 'Não Autorizado';
     }
 
+    console.log(exception);
+
     response.status(statusCode).json({
       statusCode,
       timestamp: new Date().toISOString(),

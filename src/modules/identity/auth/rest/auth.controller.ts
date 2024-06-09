@@ -33,7 +33,7 @@ export class AuthController {
 
   @HttpCode(200)
   @Public()
-  @Post('sign-in')
+  @Post('signin')
   @ApiOperation({
     summary: 'Sign In',
     description: 'Sign in',

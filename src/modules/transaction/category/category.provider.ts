@@ -7,11 +7,6 @@ import {
 import { CategoryService } from './core/services';
 import { PrismaCategoryRepository } from './persistence/repositories/category.repository';
 
-// const InMemoryDbProvider: Provider = {
-//   provide: CategoryRepository,
-//   useClass: InMemoryCategoryRepository,
-// };
-
 const PrismaDbProvider: Provider = {
   provide: CategoryRepositoryKey,
   useFactory: (prismaService: PrismaService) =>
@@ -20,7 +15,6 @@ const PrismaDbProvider: Provider = {
 };
 
 export const categoryProviders = [
-  // InMemoryDbProvider,
   PrismaService,
   PrismaDbProvider,
   {

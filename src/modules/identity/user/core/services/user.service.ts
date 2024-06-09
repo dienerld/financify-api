@@ -11,7 +11,7 @@ export class UserService {
   async save(userDto: CreateUserProps): Promise<User> {
     const userExists = await this.userRepository.findByEmail(userDto.email);
     if (userExists) {
-      throw new PersistenceBadRequestException('Email already in use');
+      throw new PersistenceBadRequestException('Email em uso');
     }
 
     const CipherPass = await this.encrypter.hash(userDto.password);
@@ -32,7 +32,7 @@ export class UserService {
     const user = await this.userRepository.findOne(id);
 
     if (!user) {
-      throw new PersistenceBadRequestException('User not found');
+      throw new PersistenceBadRequestException('Usuário não encontrado');
     }
 
     return user;

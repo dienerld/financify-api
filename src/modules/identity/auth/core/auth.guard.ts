@@ -56,7 +56,7 @@ export class AuthGuard implements CanActivate {
         .filter(([name, _]) => name.startsWith('auth_'))
         .map(([name, value]) => ({ name, value })); // response only name
 
-      if (cookie && cookie.name && cookie.value) {
+      if (cookie?.name && cookie?.value) {
         return cookie.value;
       }
     }

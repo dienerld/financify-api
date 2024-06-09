@@ -10,6 +10,7 @@ export class ClearAuthCookie implements NestInterceptor {
     const req: Request = context.switchToHttp().getRequest();
     const res: Response = context.switchToHttp().getResponse();
 
+    if (!req.cookies) return next.handle();
     // get all cookies starts with "auth_"
     const cookies = Object.entries(req.cookies)
       .filter(([name, _]) => name.startsWith('auth_'))
