@@ -18,7 +18,7 @@ export class BankAccount extends BaseEntity {
   private balance: BankAccountEntityProps['balance'];
 
   private constructor(data: CreateBankAccountProps) {
-    super(data);
+    super(data, 'Conta Bancária', '1');
     Object.assign(this, data);
   }
 
