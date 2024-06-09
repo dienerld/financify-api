@@ -1,6 +1,7 @@
 export const tags = {
-  Category: 'Categorias',
-  BankAccount: 'Conta Bancaria',
-  Transaction: 'Transação',
-  User: 'Usuário',
+  category: 'Categorias',
+  bankAccount: 'Conta Bancaria',
+  transaction: 'Transação',
+  user: 'Usuário',
+  auth: 'Autenticação',
 };

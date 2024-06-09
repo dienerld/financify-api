@@ -59,7 +59,6 @@ export class User extends BaseEntity {
       id: this.id,
       name: this.name,
       email: this.email,
-      password: this.password,
       disabled: this.disabled,
       excluded: this.excluded,
       blocked: this.blocked,

@@ -6,10 +6,13 @@ export function generateOpenApiSpec(document: DocumentBuilder) {
     .setTitle('Financify API Documentation')
     .setDescription('The Financify API Documentation')
     .setVersion('0.0.1')
-    .addBearerAuth();
+    .addCookieAuth('authorization');
 
-  Object.entries(tags).forEach(([, value]) => {
-    document.addTag(value);
+  const sortedTags = Object.entries(tags)
+    .map(([, value]) => value)
+    .sort((a, b) => a.localeCompare(b));
+  sortedTags.forEach((tag) => {
+    document.addTag(tag);
   });
 
   return document.build();

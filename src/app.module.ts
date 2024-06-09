@@ -4,11 +4,11 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { CatchAllException } from './common/exception/catch-all.exception';
 import { CustomResponseInterceptor } from './common/interceptor/response.interceptor';
 import { ClassValidatorPipe } from './common/pipes/validation.pipe';
-import { AuthModule } from './common/auth/auth.module';
-import { UsersModule } from './modules/identity/users/users.module';
+import { AuthModule } from './modules/identity/auth/auth.module';
+import { UserModule } from './modules/identity/user/user.module';
 
 @Module({
-  imports: [TransactionModule, AuthModule, UsersModule],
+  imports: [TransactionModule, AuthModule, UserModule],
   providers: [
     {
       provide: APP_FILTER,

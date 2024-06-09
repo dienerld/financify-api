@@ -26,7 +26,7 @@ export class CatchAllException implements ExceptionFilter {
       exception.message || 'Erro interno. Tente novamente mais tarde.';
 
     if (statusCode === 401 || statusCode === 403) {
-      message = 'Não Autorizado';
+      message = exception.message || 'Não Autorizado';
     }
 
     response.status(statusCode).json({

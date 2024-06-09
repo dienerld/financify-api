@@ -17,12 +17,12 @@ import { CategoryService } from '../core/services';
 import { CreateCategoryDto } from './dto/input.dto';
 import {
   CategoryDto,
-  SchemaResponseCategory,
-  SchemaResponseCategoryList,
+  SchemaCategoryResponse,
+  SchemaCategoryResponseList,
 } from './dto/output.dto';
 
 @Controller('category')
-@ApiTags(tags.Category)
+@ApiTags(tags.category)
 export class CategoryController {
   constructor(
     @Inject(CategoryService.name)
@@ -37,7 +37,7 @@ export class CategoryController {
   @ApiCreatedResponse({
     status: 201,
     description: 'Returns a category created',
-    type: CategoryDto,
+    type: SchemaCategoryResponse,
   })
   @ApiResponseUnauthorized()
   @ApiResponseServerError()
@@ -59,7 +59,7 @@ export class CategoryController {
   @ApiOkResponse({
     status: 200,
     description: 'Returns a list of categories',
-    type: SchemaResponseCategoryList,
+    type: SchemaCategoryResponseList,
   })
   @ApiResponseUnauthorized()
   @ApiResponseServerError()
@@ -75,7 +75,7 @@ export class CategoryController {
   @ApiOkResponse({
     status: 200,
     description: 'Returns a category by ID or number',
-    type: SchemaResponseCategory,
+    type: SchemaCategoryResponse,
   })
   @ApiResponseUnauthorized()
   @ApiResponseServerError()

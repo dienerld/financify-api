@@ -1,4 +1,3 @@
-import { CategoryType } from '@prisma/client';
 import {
   IsBoolean,
   IsDate,
@@ -8,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Category } from '../../core/entities/category.entity';
+import { Category, CategoryType } from '../../core/entities/category.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { CustomResponseDto } from '@/common/interceptor/dto/response.dto';
 
@@ -72,7 +71,7 @@ class ResponseCategoryWithPagination {
   categories: CategoryDto[];
 }
 
-export class SchemaResponseCategory extends CustomResponseDto<CategoryDto> {
+export class SchemaCategoryResponse extends CustomResponseDto<CategoryDto> {
   @ApiProperty({
     name: 'data',
     type: CategoryDto,
@@ -80,7 +79,7 @@ export class SchemaResponseCategory extends CustomResponseDto<CategoryDto> {
   data: CategoryDto;
 }
 
-export class SchemaResponseCategoryList extends CustomResponseDto<ResponseCategoryWithPagination> {
+export class SchemaCategoryResponseList extends CustomResponseDto<ResponseCategoryWithPagination> {
   @ApiProperty({
     name: 'data',
     type: ResponseCategoryWithPagination,

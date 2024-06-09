@@ -40,6 +40,21 @@ services:
     networks:
       - financify-network
 
+  cache:
+    image: redis
+    container_name: financify-cache
+    command: redis-server --requirepass financify
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - 6379:6379
+    networks:
+      - financify-network
+
+
 networks:
   financify-network:
     driver: bridge

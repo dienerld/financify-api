@@ -2,7 +2,7 @@
 CREATE TABLE "User" (
     "id" VARCHAR NOT NULL,
     "email" TEXT NOT NULL,
-    "name" TEXT,
+    "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "disabled" BOOLEAN NOT NULL DEFAULT false,
     "blocked" BOOLEAN NOT NULL DEFAULT false,
