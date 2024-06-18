@@ -7,9 +7,7 @@ import {
   HttpCode,
   Inject,
   Post,
-  Query,
   Res,
-  UseInterceptors,
 } from '@nestjs/common';
 
 import { Public } from '../decorators/public.decorator';
@@ -21,7 +19,7 @@ import { ApiResponseServerError } from '@/common/docs/internal-error.decorator';
 import { SignInDto } from '../dto/input.dto';
 import { SchemaSignInResponse, SignInResponseDto } from '../dto/output.dto';
 import { AuthService } from '../core/auth.service';
-import { ClearAuthCookie } from '@/common/interceptor/clear-cookies.interceptor';
+import { User, UserJwt } from '../decorators/user.decorator';
 
 @ApiTags(tags.auth)
 @Controller('auth')
@@ -45,16 +43,18 @@ export class AuthController {
   })
   @ApiResponseServerError()
   @ApiResponseBadRequest()
-  @UseInterceptors(ClearAuthCookie)
   async signIn(
     @Res({ passthrough: true }) res: Response,
     @Body() { email, password }: SignInDto,
   ): Promise<SignInResponseDto> {
-    const { id: userId, token } = await this.authService.signIn(
-      email,
-      password,
-    );
-    const cookieName = `auth_${userId}`;
+    console.log('email', email);
+
+    const {
+      id: userId,
+      token,
+      name,
+    } = await this.authService.signIn(email, password);
+    const cookieName = `Authentication`;
     res.cookie(cookieName, token, {
       httpOnly: true,
       secure: false,
@@ -62,16 +62,17 @@ export class AuthController {
       expires: new Date(Date.now() + 1 * 20 * 60 * 1000),
     });
     return {
+      name,
+      id: userId,
       token,
     };
   }
 
-  @Public()
-  @Get()
+  @Get('me')
   @ApiOperation({
-    summary: 'logout',
+    summary: 'Get user',
   })
-  async logout(@Query('userId') userId: string) {
-    await this.authService.logout(userId);
+  async me(@User() user: UserJwt) {
+    return user;
   }
 }

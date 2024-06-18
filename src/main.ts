@@ -9,9 +9,9 @@ import { generateOpenApiSpec } from './config/docs/generate-spec';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-
+  app.setGlobalPrefix('api');
   const config = generateOpenApiSpec(new DocumentBuilder());
-
+  app.enableCors();
   const document = SwaggerModule.createDocument(app, config);
   document.tags = document.tags?.sort((a, b) => a.name.localeCompare(b.name));
   app.use(

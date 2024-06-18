@@ -30,6 +30,7 @@ export class CatchAllException implements ExceptionFilter {
     }
 
     console.log(exception);
+    console.log(exception.response?.invalidFields);
 
     response.status(statusCode).json({
       statusCode,

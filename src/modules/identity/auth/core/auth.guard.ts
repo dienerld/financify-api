@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -22,8 +22,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request: Request = context.switchToHttp().getRequest();
-    const response: Response = context.switchToHttp().getResponse();
+    const request = context.switchToHttp().getRequest();
 
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -34,7 +33,9 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const token = this.extractJWTFromCookie(request);
+    const token = this.extractJWTFromHeader(request);
+    console.log('token', token);
+
     if (!token) {
       throw new UnauthorizedException('Token inválido ou inexistente');
     }
@@ -43,27 +44,23 @@ export class AuthGuard implements CanActivate {
       `${redisConst.userSession}-${data.sub}`,
     );
     if (!tokenSession || tokenSession !== token) {
-      this.removeJWTFromCookie(response, data.sub);
       throw new UnauthorizedException('Sessão inválida');
     }
+
+    request.user = data;
 
     return data;
   }
 
-  private extractJWTFromCookie(req: Request): string | null {
-    if (req.cookies) {
-      const [cookie] = Object.entries(req.cookies)
-        .filter(([name, _]) => name.startsWith('auth_'))
-        .map(([name, value]) => ({ name, value })); // response only name
-
-      if (cookie?.name && cookie?.value) {
-        return cookie.value;
-      }
+  private extractJWTFromHeader(req: Request): string | null {
+    const [loader, token] = req.headers.authorization?.split(' ') || [];
+    if (
+      loader === 'Bearer' &&
+      token &&
+      ['undefined', 'null'].includes(token) === false
+    ) {
+      return token;
     }
     return null;
-  }
-
-  private removeJWTFromCookie(res: Response, userId: string): void {
-    res.clearCookie(`auth_${userId}`);
   }
 }

@@ -4,6 +4,12 @@ import { ApiProperty } from '@nestjs/swagger';
 export class SignInResponseDto {
   @ApiProperty()
   token: string;
+
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
 }
 
 export class SchemaSignInResponse extends CustomResponseDto<SignInResponseDto> {
