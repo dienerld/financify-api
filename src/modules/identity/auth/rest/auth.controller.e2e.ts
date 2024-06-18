@@ -15,8 +15,12 @@ import { SignInDto } from '../dto/input.dto';
 import { AuthService } from '../core/auth.service';
 import { AuthController } from './auth.controller';
 
-const expectValidation = (response: any, message: string) => {
-  expect(response.status).toBe(400);
+const expectValidation = (
+  response: any,
+  message: string,
+  status: number = 400,
+) => {
+  expect(response.status).toBe(status);
   expect(response.body.success).toBeFalsy();
   expect(response.body.message).toBe(message);
 };
@@ -35,21 +39,11 @@ describe('UserController', () => {
 
   beforeAll(async () => {
     nestApp = await BuildAppModule(AuthController, [
-      {
-        provide: UserRepositoryKey,
-        useClass: UserRepositoryMock,
-      },
-      {
-        provide: EncrypterKey,
-        useClass: EncrypterMock,
-      },
+      { provide: UserRepositoryKey, useClass: UserRepositoryMock },
+      { provide: EncrypterKey, useClass: EncrypterMock },
       {
         provide: RedisService,
-        useValue: {
-          set: vi.fn(),
-          del: vi.fn(),
-          get: vi.fn(),
-        },
+        useValue: { set: vi.fn(), del: vi.fn(), get: vi.fn() },
       },
       {
         provide: AuthService.name,
@@ -97,6 +91,7 @@ describe('UserController', () => {
         { field: 'email', message: 'Email é obrigatório, Email inválido' },
       ]);
     });
+
     it('should return 400 if email is invalid', async () => {
       const response = await request(app).post(`${path}/signin`).send({
         password: 'any password',
@@ -109,6 +104,15 @@ describe('UserController', () => {
       ]);
     });
 
+    it('should return 401 if email not found', async () => {
+      const response = await request(app).post(`${path}/signin`).send({
+        email: 'not_found@mail.com',
+        password: 'any password',
+      });
+
+      expectValidation(response, 'Email ou senha inválido', 401);
+    });
+
     it('should return 400 if password is not provided', async () => {
       const response = await request(app).post(`${path}/signin`).send({
         email: 'any@mail.com',
@@ -118,6 +122,23 @@ describe('UserController', () => {
       expect(response.body.invalidFields).toEqual([
         { field: 'password', message: 'Senha é obrigatória' },
       ]);
+    });
+
+    it('should return 401 if password is invalid', async () => {
+      const user = makeUser();
+      UserRepositoryMock.users.push(
+        User.createNew({
+          email: user.email,
+          password: user.password,
+          name: 'any name',
+        }),
+      );
+
+      const response = await request(app)
+        .post(`${path}/signin`)
+        .send({ email: user.email, password: 'invalid password' });
+
+      expectValidation(response, 'Email ou senha inválido', 401);
     });
   });
 });
