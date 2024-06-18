@@ -34,7 +34,6 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = this.extractJWTFromHeader(request);
-    console.log('token', token);
 
     if (!token) {
       throw new UnauthorizedException('Token inválido ou inexistente');

@@ -9,6 +9,7 @@ import { encrypterProvider } from '../user/external/encrypter/encrypter.provider
 import { userRepositoryProvider } from '../user/external/repositories/user-repository.provider';
 import { AuthService } from './core/auth.service';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from '@/database/redis/redis.service';
 
 export const AuthProviders = [
   PrismaService,
@@ -20,7 +21,8 @@ export const AuthProviders = [
       userRepository: UserRepository,
       encrypter: Encrypter,
       jwtService: JwtService,
-    ) => new AuthService(userRepository, encrypter, jwtService),
-    inject: [UserRepositoryKey, EncrypterKey, JwtService],
+      redisService: RedisService,
+    ) => new AuthService(userRepository, encrypter, jwtService, redisService),
+    inject: [UserRepositoryKey, EncrypterKey, JwtService, RedisService],
   },
 ];

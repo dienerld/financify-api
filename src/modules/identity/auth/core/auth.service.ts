@@ -5,12 +5,15 @@ import {
 } from '@modules/identity/user/core/interfaces';
 import { User } from '@modules/identity/user/core/entities';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from '@/database/redis/redis.service';
+import { redisConst } from '@/database/redis/constants';
 
 export class AuthService {
   public constructor(
     private readonly userRepository: UserRepository,
     private readonly encrypter: Encrypter,
     private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
   ) {}
 
   async signIn(
@@ -40,6 +43,11 @@ export class AuthService {
       email: user.getEmail(),
     });
 
+    await this.redisService.set(
+      `${redisConst.userSession}-${user.getId()}`,
+      token,
+    );
+
     return {
       token,
       name: user.getName(),
@@ -62,5 +70,9 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async logout(userId: string): Promise<void> {
+    await this.redisService.del(`${redisConst.userSession}-${userId}`);
   }
 }

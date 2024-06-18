@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { INestApplication } from '@nestjs/common';
 
 import { BuildAppModule } from '@/__tests__/builders/app.builder';
+import { RedisService } from '@/database/redis/redis.service';
 
 import { UserRepositoryMock } from '../../user/__tests__/user-repository-mock';
 import { EncrypterMock } from '../../user/__tests__/encrypter-mock';
@@ -43,10 +44,18 @@ describe('UserController', () => {
         useClass: EncrypterMock,
       },
       {
+        provide: RedisService,
+        useValue: {
+          set: vi.fn(),
+          del: vi.fn(),
+          get: vi.fn(),
+        },
+      },
+      {
         provide: AuthService.name,
-        useFactory: (userRepository, encrypter, jwt) =>
-          new AuthService(userRepository, encrypter, jwt),
-        inject: [UserRepositoryKey, EncrypterKey, JwtService],
+        useFactory: (userRepository, encrypter, jwt, redis) =>
+          new AuthService(userRepository, encrypter, jwt, redis),
+        inject: [UserRepositoryKey, EncrypterKey, JwtService, RedisService],
       },
     ]);
     app = nestApp.getHttpServer();

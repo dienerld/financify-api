@@ -1,5 +1,10 @@
 import { Response } from 'express';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -47,8 +52,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Body() { email, password }: SignInDto,
   ): Promise<SignInResponseDto> {
-    console.log('email', email);
-
     const {
       id: userId,
       token,
@@ -68,6 +71,7 @@ export class AuthController {
     };
   }
 
+  @ApiBearerAuth()
   @Get('me')
   @ApiOperation({
     summary: 'Get user',
