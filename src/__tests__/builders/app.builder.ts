@@ -7,6 +7,7 @@ import { CustomResponseInterceptor } from '@/common/interceptor/response.interce
 import { ClassValidatorPipe } from '@/common/pipes/validation.pipe';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from '@/modules/identity/auth/auth.module';
 
 /**
  * BuildAppModule
@@ -15,13 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
  */
 export async function BuildAppModule(module: any): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [
-      ConfigModule.forRoot({ isGlobal: true }),
-      JwtModule.register({
-        secret: 'any_secret',
-      }),
-      module,
-    ],
+    imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, module],
     providers: [
       {
         provide: APP_FILTER,

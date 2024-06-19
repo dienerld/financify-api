@@ -1,9 +1,9 @@
-import { EncrypterMock } from '../../__tests__/encrypter-mock';
-import { UserRepositoryMock } from '../../__tests__/user-repository-mock';
+import { EncrypterMock } from '../../__tests__/mock/encrypter-mock';
 import { UserRepository, Encrypter } from '../interfaces';
 import { UserService } from './user.service';
 import { PersistenceBadRequestException } from '@/database/exception/client.exception';
 import { CreateUserProps, User } from '../entities';
+import { UserRepositoryMock } from '../../__tests__/mock/user-repository-mock';
 
 describe('UserService', () => {
   let service: UserService;

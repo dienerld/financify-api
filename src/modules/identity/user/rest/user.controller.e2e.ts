@@ -1,10 +1,15 @@
 import request from 'supertest';
 import { BuildAppModule } from '@/__tests__/builders/app.builder';
-import { INestApplication } from '@nestjs/common';
-import { CreateUserDto } from './dto/input.dto';
-import { User } from '../core/entities';
-import { UserModule } from '../user.module';
 import { PrismaService } from '@/common/prisma/prisma.service';
+import { INestApplication } from '@nestjs/common';
+
+import { UserModule } from '../user.module';
+import { CreateUserDto } from './dto/input.dto';
+
+import { UserBuilder } from '../__tests__/builder/user.builder';
+import { SessionBuilder } from '@/__tests__/builders/auth-token.builder';
+import { RedisService } from '@/database/redis/redis.service';
+import { redisConst } from '@/database/redis/constants';
 
 const expectValidation = (response: any, message: string) => {
   expect(response.status).toBe(400);
@@ -24,6 +29,7 @@ describe('UserController', () => {
   let app: any;
   let nestApp: INestApplication;
   let prismaService: PrismaService;
+  let redisService: RedisService;
 
   const path = '/user';
 
@@ -31,6 +37,12 @@ describe('UserController', () => {
     nestApp = await BuildAppModule(UserModule);
     app = nestApp.getHttpServer();
     prismaService = nestApp.get(PrismaService);
+    redisService = nestApp.get(RedisService);
+  });
+
+  afterAll(async () => {
+    await redisService.delByPattern(`${redisConst.userSession}-*`);
+    await nestApp.close();
   });
 
   beforeEach(async () => {
@@ -64,9 +76,11 @@ describe('UserController', () => {
 
     it('should return 400 when user already exists', async () => {
       const user = makeUser();
-      await prismaService.user.create({
-        data: { ...User.createNew(user).toJSON(), password: user.password },
-      });
+      await UserBuilder.init()
+        .withName(user.name)
+        .withEmail(user.email)
+        .withPassword(user.password)
+        .buildAndSave(prismaService);
 
       const response = await request(app).post(path).send(user);
 
@@ -107,6 +121,33 @@ describe('UserController', () => {
       expect(response.body.invalidFields).toEqual([
         { field: 'password', message: 'Senha é obrigatória' },
       ]);
+    });
+  });
+
+  describe('GET user - List', () => {
+    it('should return 200 with empty list', async () => {
+      const { bearer } = await SessionBuilder.init(redisService).build();
+      const response = await request(app)
+        .get(path)
+        .set('Authorization', bearer);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBeTruthy();
+      expect(response.body.data).toEqual([]);
+    });
+
+    it('should return 200 with list of users', async () => {
+      await UserBuilder.init().buildAndSave(prismaService);
+      const { bearer } = await SessionBuilder.init(redisService).build();
+
+      const response = await request(app)
+        .get(path)
+        .set('Authorization', bearer);
+
+      console.log(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBeTruthy();
     });
   });
 });

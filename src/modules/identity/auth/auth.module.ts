@@ -13,7 +13,7 @@ import { RedisModule } from '@/database/redis/redis.module';
     RedisModule,
     JwtModule.register({
       global: true,
-      secret: 'const',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '2h' },
     }),
   ],
