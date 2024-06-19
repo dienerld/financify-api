@@ -5,6 +5,7 @@ export default defineConfig({
   ...commonConfig,
   test: {
     ...commonConfig.test,
+    fileParallelism: false,
     include: ['src/**/*.e2e.ts'],
   },
 });

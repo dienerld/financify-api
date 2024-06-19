@@ -1,19 +1,14 @@
 import request from 'supertest';
-import { JwtService } from '@nestjs/jwt';
 import { INestApplication } from '@nestjs/common';
 
 import { BuildAppModule } from '@/__tests__/builders/app.builder';
-import { RedisService } from '@/database/redis/redis.service';
 
-import { UserRepositoryMock } from '../../user/__tests__/user-repository-mock';
-import { EncrypterMock } from '../../user/__tests__/encrypter-mock';
-
-import { EncrypterKey, UserRepositoryKey } from '../../user/core/interfaces';
 import { User } from '../../user/core/entities';
 import { SignInDto } from '../dto/input.dto';
 
-import { AuthService } from '../core/auth.service';
-import { AuthController } from './auth.controller';
+import { AuthModule } from '../auth.module';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { Encrypter, EncrypterKey } from '../../user/core/interfaces';
 
 const expectValidation = (
   response: any,
@@ -35,28 +30,20 @@ function makeUser(): SignInDto {
 describe('UserController', () => {
   let app: any;
   let nestApp: INestApplication;
+  let prismaService: PrismaService;
+  let encrypter: Encrypter;
+
   const path = '/auth';
 
   beforeAll(async () => {
-    nestApp = await BuildAppModule(AuthController, [
-      { provide: UserRepositoryKey, useClass: UserRepositoryMock },
-      { provide: EncrypterKey, useClass: EncrypterMock },
-      {
-        provide: RedisService,
-        useValue: { set: vi.fn(), del: vi.fn(), get: vi.fn() },
-      },
-      {
-        provide: AuthService.name,
-        useFactory: (userRepository, encrypter, jwt, redis) =>
-          new AuthService(userRepository, encrypter, jwt, redis),
-        inject: [UserRepositoryKey, EncrypterKey, JwtService, RedisService],
-      },
-    ]);
+    nestApp = await BuildAppModule(AuthModule);
+    prismaService = nestApp.get(PrismaService);
+    encrypter = nestApp.get(EncrypterKey);
     app = nestApp.getHttpServer();
   });
 
-  beforeEach(() => {
-    UserRepositoryMock.users = [];
+  beforeEach(async () => {
+    await prismaService.user.deleteMany();
   });
 
   it('should be defined', () => {
@@ -65,17 +52,21 @@ describe('UserController', () => {
 
   describe('POST auth - SignIn', () => {
     it('should return 200 with token', async () => {
-      const user = makeUser();
-      UserRepositoryMock.users.push(
-        User.createNew({
-          email: user.email,
-          password: user.password,
-          name: 'any name',
-        }),
-      );
+      const userDto = makeUser();
+      const user = User.createNew({
+        email: userDto.email,
+        password: userDto.password,
+        name: 'any name',
+      });
+      await prismaService.user.create({
+        data: {
+          ...user.toJSON(),
+          password: await encrypter.hash(user.getPassword()),
+        },
+      });
       const response = await request(app)
         .post(`${path}/signin`)
-        .send({ email: user.email, password: user.password });
+        .send({ email: userDto.email, password: userDto.password });
 
       expect(response.status).toBe(200);
       expect(response.body.data.token).toBeTruthy();
@@ -125,18 +116,23 @@ describe('UserController', () => {
     });
 
     it('should return 401 if password is invalid', async () => {
-      const user = makeUser();
-      UserRepositoryMock.users.push(
-        User.createNew({
-          email: user.email,
-          password: user.password,
-          name: 'any name',
-        }),
-      );
+      const userDto = makeUser();
+      const user = User.createNew({
+        email: userDto.email,
+        password: userDto.password,
+        name: 'any name',
+      });
+
+      await prismaService.user.create({
+        data: {
+          ...user.toJSON(),
+          password: user.getPassword(),
+        },
+      });
 
       const response = await request(app)
         .post(`${path}/signin`)
-        .send({ email: user.email, password: 'invalid password' });
+        .send({ email: userDto.email, password: 'invalid password' });
 
       expectValidation(response, 'Email ou senha inválido', 401);
     });

@@ -4,11 +4,13 @@
   "description": "",
   "scripts": {
     "dev": "nest start --watch",
-    "test": "vitest run --config ./vitest.config.ts",
-    "test:cov": "vitest run --config ./vitest.config.ts --coverage",
-    "test:unit": "vitest --config ./vitest-unit.config.ts",
-    "test:e2e": "vitest --config ./vitest-e2e.config.ts",
-    "db:migrate": "prisma migrate dev"
+    "test": "dotenv -e .env.test -- vitest",
+    "test:run": "yarn test run --config ./vitest.config.ts --fileParallelism false",
+    "test:cov": "yarn test run --config ./vitest.config.ts --coverage --fileParallelism false",
+    "test:unit": "yarn test --config ./vitest-unit.config.ts",
+    "test:e2e": "yarn test --config ./vitest-e2e.config.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:test": "dotenv -e .env.test -- prisma migrate dev"
   },
   "keywords": [],
   "author": "Diener Dornelas <diener.ld@outlook.com>",
@@ -51,6 +53,7 @@
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-istanbul": "^1.6.0",
     "@vitest/coverage-v8": "^1.6.0",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.0",
     "eslint-config-dienerld": "^1.0.9",
     "prisma": "^5.14.0",

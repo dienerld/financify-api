@@ -1,13 +1,10 @@
 import request from 'supertest';
 import { BuildAppModule } from '@/__tests__/builders/app.builder';
 import { INestApplication } from '@nestjs/common';
-import { EncrypterKey, UserRepositoryKey } from '../core/interfaces';
-import { UserRepositoryMock } from '../__tests__/user-repository-mock';
-import { UserController } from './user.controller';
-import { EncrypterMock } from '../__tests__/encrypter-mock';
-import { UserService } from '../core/services';
 import { CreateUserDto } from './dto/input.dto';
 import { User } from '../core/entities';
+import { UserModule } from '../user.module';
+import { PrismaService } from '@/common/prisma/prisma.service';
 
 const expectValidation = (response: any, message: string) => {
   expect(response.status).toBe(400);
@@ -26,30 +23,18 @@ function makeUser(): CreateUserDto {
 describe('UserController', () => {
   let app: any;
   let nestApp: INestApplication;
+  let prismaService: PrismaService;
+
   const path = '/user';
 
   beforeAll(async () => {
-    nestApp = await BuildAppModule(UserController, [
-      {
-        provide: UserRepositoryKey,
-        useClass: UserRepositoryMock,
-      },
-      {
-        provide: EncrypterKey,
-        useClass: EncrypterMock,
-      },
-      {
-        provide: UserService.name,
-        useFactory: (userRepository, encrypter) =>
-          new UserService(userRepository, encrypter),
-        inject: [UserRepositoryKey, EncrypterKey],
-      },
-    ]);
+    nestApp = await BuildAppModule(UserModule);
     app = nestApp.getHttpServer();
+    prismaService = nestApp.get(PrismaService);
   });
 
-  beforeEach(() => {
-    UserRepositoryMock.users = [];
+  beforeEach(async () => {
+    await prismaService.user.deleteMany();
   });
 
   it('should be defined', () => {
@@ -71,13 +56,17 @@ describe('UserController', () => {
         }),
       );
 
-      expect(UserRepositoryMock.users.length).toBe(1);
-      expect(UserRepositoryMock.users[0].getId()).toBe(response.body.data.id);
+      expect(await prismaService.user.count()).toBe(1);
+      expect((await prismaService.user.findMany())[0].id).toBe(
+        response.body.data.id,
+      );
     });
 
     it('should return 400 when user already exists', async () => {
       const user = makeUser();
-      UserRepositoryMock.users.push(User.createNew(user));
+      await prismaService.user.create({
+        data: { ...User.createNew(user).toJSON(), password: user.password },
+      });
 
       const response = await request(app).post(path).send(user);
 
