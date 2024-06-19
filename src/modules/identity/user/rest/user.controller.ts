@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -14,7 +14,7 @@ import { tags } from '@/config/docs/tags';
 import { Public } from '@/modules/identity/auth/decorators/public.decorator';
 
 import { UserService } from '../core/services';
-import { CreateUserDto } from './dto/input.dto';
+import { CreateUserDto, ParamFindOneUserDto } from './dto/input.dto';
 import {
   SchemaUserResponse,
   SchemaUserResponseList,
@@ -72,5 +72,27 @@ export class UserController {
     await validateOrReject(usersDto);
 
     return usersDto;
+  }
+
+  @ApiOperation({
+    summary: 'Busca de usuário por id',
+    description: 'Retorna um usuário encontrado com todas suas informações',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Retorna o usuário encontrado',
+    type: SchemaUserResponse,
+  })
+  @ApiResponseUnauthorized()
+  @ApiResponseServerError()
+  @ApiResponseBadRequest()
+  @Get(':id')
+  async findOne(@Param() { id }: ParamFindOneUserDto) {
+    const user = await this.userService.findOne(id);
+    const userDto = new UserDto(user);
+
+    await validateOrReject(userDto);
+
+    return userDto;
   }
 }

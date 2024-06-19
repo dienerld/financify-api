@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { CreateUserProps } from '../../core/entities';
+import { IsUlid } from '@/common/decorator/is-ulid.decorator';
 
 export class CreateUserDto implements CreateUserProps {
   @IsString({ message: 'Nome inválido' })
@@ -31,4 +32,16 @@ export class CreateUserDto implements CreateUserProps {
     example: '123456',
   })
   password: string;
+}
+
+export class ParamFindOneUserDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    name: 'id',
+    type: String,
+    description: 'Deve ser o identificador do usuário',
+  })
+  @IsUlid({ message: 'ID inválido' })
+  id: string;
 }

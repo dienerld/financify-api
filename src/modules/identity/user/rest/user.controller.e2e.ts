@@ -10,6 +10,7 @@ import { UserBuilder } from '../__tests__/builder/user.builder';
 import { SessionBuilder } from '@/__tests__/builders/auth-token.builder';
 import { RedisService } from '@/database/redis/redis.service';
 import { redisConst } from '@/database/redis/constants';
+import { ulid } from 'ulid';
 
 const expectValidation = (response: any, message: string) => {
   expect(response.status).toBe(400);
@@ -53,7 +54,7 @@ describe('UserController', () => {
     expect(app).toBeDefined();
   });
 
-  describe('POST user - Create', () => {
+  describe('POST - Create', () => {
     it('should return 201 with user created', async () => {
       const user = makeUser();
       const response = await request(app).post(path).send(user);
@@ -124,7 +125,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('GET user - List', () => {
+  describe('GET - List', () => {
     it('should return 200 with empty list', async () => {
       const { bearer } = await SessionBuilder.init(redisService).build();
       const response = await request(app)
@@ -146,6 +147,39 @@ describe('UserController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBeTruthy();
+    });
+  });
+
+  describe('GET - Find', () => {
+    it('should return 200 with user found', async () => {
+      const user = await UserBuilder.init().buildAndSave(prismaService);
+      const { bearer } = await SessionBuilder.init(redisService).build();
+
+      const response = await request(app)
+        .get(`${path}/${user.getId()}`)
+        .set('Authorization', bearer);
+
+      expect(response.status).toBe(200);
+      expect(response.body.success).toBeTruthy();
+      expect(response.body.data).toEqual(
+        expect.objectContaining({
+          id: user.getId(),
+          email: user.getEmail(),
+          name: user.getName(),
+        }),
+      );
+    });
+
+    it('should return 404 when user not found', async () => {
+      const { bearer } = await SessionBuilder.init(redisService).build();
+
+      const response = await request(app)
+        .get(`${path}/${ulid()}`)
+        .set('Authorization', bearer);
+
+      expect(response.status).toBe(404);
+      expect(response.body.success).toBeFalsy();
+      expect(response.body.message).toBe('Usuário não encontrado');
     });
   });
 });

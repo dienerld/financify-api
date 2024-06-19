@@ -1,8 +1,11 @@
+import {
+  PersistenceBadRequestException,
+  PersistenceNotFoundException,
+} from '@/database/exception/client.exception';
 import { EncrypterMock } from '../../__tests__/mock/encrypter-mock';
 import { UserRepository, Encrypter } from '../interfaces';
-import { UserService } from './user.service';
-import { PersistenceBadRequestException } from '@/database/exception/client.exception';
 import { CreateUserProps, User } from '../entities';
+import { UserService } from './user.service';
 import { UserRepositoryMock } from '../../__tests__/mock/user-repository-mock';
 
 describe('UserService', () => {
@@ -107,9 +110,9 @@ describe('UserService', () => {
     });
 
     it('should throw an error when user not found', async () => {
-      const result = service.findOne('1');
+      const result = service.findOne('any id');
 
-      await expect(result).rejects.toThrowError(PersistenceBadRequestException);
+      await expect(result).rejects.toThrowError(PersistenceNotFoundException);
     });
   });
 });

@@ -66,6 +66,7 @@ describe('Entity - Category', () => {
           'Despesas operacionais da empresa',
         );
         expect(category.getType()).toBe('expense');
+        expect(category.getCode()).toBe(1);
       });
     });
   });

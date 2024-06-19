@@ -1,61 +1,33 @@
-import {
-  ApiBadRequestResponse,
-  ApiProperty,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiProperty } from '@nestjs/swagger';
+import { BaseOpenApiResponse } from './base';
 
 class InvalidField {
   @ApiProperty({
     name: 'field',
     type: String,
-    description: 'Field an invalid',
+    description: 'Campo inválido',
   })
   field: string;
 
   @ApiProperty({
     name: 'message',
     type: String,
-    description: 'message explain error',
+    description: 'Mensagem de erro',
   })
   message: string;
 }
 
-class BadRequestResponse {
-  @ApiProperty({
-    name: 'statusCode',
-    type: Number,
-    example: 401,
-    description: 'Returns a request status code',
-  })
-  statusCode: number = 401;
-
-  @ApiProperty({
-    name: 'timestamp',
-    type: String,
-    description: 'Returns a timestamp of request',
-  })
-  timestamp: string;
-
-  @ApiProperty({
-    name: 'path',
-    type: String,
-    description: 'Returns a path requested',
-  })
-  path: string;
-
-  @ApiProperty({
-    name: 'message',
-    type: String,
-    description: 'Returns a summary error',
-  })
-  message: string;
+class BadRequestResponse extends BaseOpenApiResponse {
+  constructor() {
+    super(400);
+  }
 
   @ApiProperty({
     name: 'invalidFields',
     type: InvalidField,
     isArray: true,
     nullable: true,
-    description: 'Returns a invalid fields if',
+    description: 'Returna um array com os campos inválidos',
   })
   invalidFields: InvalidField[];
 }
@@ -63,6 +35,6 @@ class BadRequestResponse {
 export function ApiResponseBadRequest() {
   return ApiBadRequestResponse({
     type: BadRequestResponse,
-    description: 'Returns an error when not authenticated',
+    description: 'Returna um erro de validação dos campos',
   });
 }

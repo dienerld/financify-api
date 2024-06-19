@@ -2,7 +2,6 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 import { UserRepository } from '../../core/interfaces';
 import { User } from '../../core/entities';
-import { PersistenceNotFoundException } from '@/database/exception/client.exception';
 
 export class PrismaUserRepository implements UserRepository {
   private readonly repository: PrismaClient['user'];
@@ -27,13 +26,13 @@ export class PrismaUserRepository implements UserRepository {
     return users.map(this.mapToEntity);
   }
 
-  async findOne(value: string): Promise<User> {
+  async findOne(value: string): Promise<User | null> {
     const user = await this.repository.findUnique({
       where: { id: value },
     });
 
     if (!user) {
-      throw new PersistenceNotFoundException('User not found');
+      return null;
     }
 
     return this.mapToEntity(user);

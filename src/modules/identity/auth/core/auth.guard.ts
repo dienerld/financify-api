@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +14,6 @@ import { redisConst } from '@/database/redis/constants';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly redisService: RedisService,
     private reflector: Reflector,

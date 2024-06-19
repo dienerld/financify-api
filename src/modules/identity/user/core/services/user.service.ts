@@ -1,4 +1,7 @@
-import { PersistenceBadRequestException } from '@/database/exception/client.exception';
+import {
+  PersistenceBadRequestException,
+  PersistenceNotFoundException,
+} from '@/database/exception/client.exception';
 import { CreateUserProps, User } from '../entities';
 import { Encrypter, UserRepository } from '../interfaces';
 
@@ -32,7 +35,7 @@ export class UserService {
     const user = await this.userRepository.findOne(id);
 
     if (!user) {
-      throw new PersistenceBadRequestException('Usuário não encontrado');
+      throw new PersistenceNotFoundException('Usuário não encontrado');
     }
 
     return user;
