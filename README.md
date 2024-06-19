@@ -1,53 +1,8 @@
-<h1 align="center">
-  <a href="https://github.com/dienerld/financify-api">
-    <!-- Please provide path to your logo here -->
-    <img src="docs/images/logo.svg" alt="Logo" width="100" height="100">
-  </a>
-</h1>
+# Financify Api
 
-<div align="center">
-  Financify Api
-  <br />
-  <a href="#about"><strong>Explore the screenshots »</strong></a>
-  <br />
-  <br />
-  <a href="https://github.com/dienerld/financify-api/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
-  ·
-  <a href="https://github.com/dienerld/financify-api/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
-  .
-  <a href="https://github.com/dienerld/financify-api/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+">Ask a Question</a>
-</div>
+Financify é uma API que tem como objetivo gerenciar as finanças de pequenas empresas e pessoas físicas, de forma simples e prática.
 
-<div align="center">
-<br />
-
-[![Project license](https://img.shields.io/github/license/dienerld/financify-api.svg?style=flat-square)](LICENSE)
-
-[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/dienerld/financify-api/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with love by dienerld](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-dienerld-ff1414.svg?style=flat-square)](https://github.com/dienerld)
-
-</div>
-
-<details open="open">
-<summary>Table of Contents</summary>
-
-- [About](#about)
-  - [Built With](#built-with)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-- [Roadmap](#roadmap)
-- [Support](#support)
-- [Contributing](#contributing)
-- [Authors & contributors](#authors--contributors)
-- [Security](#security)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
-</details>
-
----
-
-## About
+## Objetivo
 
 O objetivo do projeto é criar uma API que possa ser utilizada por pequenas empresas e pessoas físicas para gerenciar suas finanças de forma simples e prática. Tratando de forma eficiente o controle de contas a pagar, contas a receber, fluxo de caixa, entre outros.
 
@@ -55,16 +10,49 @@ O projeto é fruto de um desafio próprio para aplicar estudos de aperfeiçoamen
 
 Utilizando um cenário de desenvolvimento real, o projeto será desenvolvido em etapas, onde cada etapa terá um objetivo específico a ser alcançado. A ideia é que o projeto seja desenvolvido de forma incremental, onde a cada etapa um novo recurso seja adicionado a aplicação.
 
-### Built With
+## Negócio
+
+Para um melhor entendimento do negócio, vamos definir alguns conceitos que serão utilizados ao longo do projeto.
+
+## Etapas
+
+### 1. Planejamento
+
+- [X] ~~*Definição do escopo do projeto*~~ [2024-05-18]
+- [ ] Definir domínios da aplicação
+  - [X] ~~*Core Business*~~ [2024-05-18]
+  - [ ] Identidade ( Autenticação e Autorização )
+  - [ ] Assinaturas
+  - [ ] Pagamentos
+- [ ] Definir arquitetura da aplicação
+
+### 2. Desenvolvimento
+
+O desenvolvimento do projeto será dividido em etapas, onde cada etapa terá um objetivo específico a ser alcançado. A ideia é que o projeto seja desenvolvido de forma incremental, onde a cada etapa um novo recurso seja adicionado a aplicação.
+
+Será utilizado o conceito de DDD (Domain-Driven Design) para organizar o código da aplicação. Onde cada domínio da aplicação será separado em módulos, contendo suas próprias regras de negócio, serviços, repositórios, etc.
+
+Para aplicar os conceitos de DDD será utilizado TDD (Test-Driven Development) para garantir a qualidade do código e a integridade dos dados, onde cada funcionalidade da aplicação será desenvolvida a partir de testes automatizados baseando-se nos requisitos e nas regras de negócio previamente definidas para a aplicação
+
+---
+
+| Domínio       | Entidades | Serviços | Repositórios |
+|---------------|-----------|----------|--------------|
+| Core Business | ✅       | [ ]      | [ ]          |
+| Identidade    | [ ]       | [ ]      | [ ]          |
+| Assinaturas   | [ ]       | [ ]      | [ ]          |
+| Pagamentos    | [ ]       | [ ]      | [ ]          |
+
+## Tecnologias
 
 - Node.js
 - TypeScript
 - Vitest
 - NestJs
 
-## Getting Started
+---
 
-### Prerequisites
+## Instalação
 
 Para instalar o projeto, siga os passos abaixo:
 
@@ -94,51 +82,6 @@ Os arquivos do banco de dados serão salvos em uma pasta chamada .docker/financi
 yarn dev
 ```
 
-## Roadmap
+---
 
-See the [open issues](https://github.com/dienerld/financify-api/issues) for a list of proposed features (and known issues).
-
-- [Top Feature Requests](https://github.com/dienerld/financify-api/issues?q=label%3Aenhancement+is%3Aopen+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Top Bugs](https://github.com/dienerld/financify-api/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Newest Bugs](https://github.com/dienerld/financify-api/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
-
-## Support
-
-> **[?]**
-> Provide additional ways to contact the project maintainer/maintainers.
-
-Reach out to the maintainer at one of the following places:
-
-- [GitHub issues](https://github.com/dienerld/financify-api/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+)
-- Contact options listed on [this GitHub profile](https://github.com/dienerld)
-
-## Contributing
-
-First off, thanks for taking the time to contribute! Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
-
-Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you for being involved!
-
-## Authors & contributors
-
-The original setup of this repository is by [Diener Dornelas](https://github.com/dienerld).
-
-For a full list of all authors and contributors, see [the contributors page](https://github.com/dienerld/financify-api/contributors).
-
-## Security
-
-Financify Api follows good practices of security, but 100% security cannot be assured.
-Financify Api is provided **"as is"** without any **warranty**. Use at your own risk.
-
-_For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
-
-## License
-
-This project is licensed under the **GNU General Public License v3**.
-
-See [LICENSE](LICENSE) for more information.
-
-## Acknowledgements
-
-> **[?]**
-> If your work was funded by any organization or institution, acknowledge their support here.
-> In addition, if your work relies on other software libraries, or was inspired by looking at other work, it is appropriate to acknowledge this intellectual debt too.
+Desenvolvido por [Diener Dornelas](https://github.com/dienerld)
