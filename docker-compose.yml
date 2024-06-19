@@ -1,0 +1,99 @@
+name: financify-api
+
+services:
+  api:
+    image: financify-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - .:/app
+      - ./node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - financify-network
+
+  db:
+    image: postgres:13-alpine
+    container_name: financify-db
+    environment:
+      POSTGRES_USER: financify
+      POSTGRES_PASSWORD: financify
+      POSTGRES_DB: financify
+    ports:
+      - '5432:5432'
+    volumes:
+      - ../.docker/financify-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U financify' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - financify-network
+
+  cache:
+    image: redis
+    container_name: financify-cache
+    command: redis-server --requirepass financify
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - 6379:6379
+    networks:
+      - financify-network
+
+  cache-test:
+    image: redis
+    container_name: financify-cache-test
+    command: redis-server --requirepass financify
+    # limit cpu
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 50M
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - 6380:6379
+    networks:
+      - financify-network
+
+  database-test:
+    image: postgres:13-alpine
+    container_name: financify-db-test
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 250M
+    environment:
+      POSTGRES_USER: financify
+      POSTGRES_PASSWORD: financify
+      POSTGRES_DB: financify_test
+    ports:
+      - '5433:5432'
+
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U financify' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - financify-network
+
+networks:
+  financify-network:
+    driver: bridge
