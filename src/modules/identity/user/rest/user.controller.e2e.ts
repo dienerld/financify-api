@@ -144,8 +144,6 @@ describe('UserController', () => {
         .get(path)
         .set('Authorization', bearer);
 
-      console.log(response.body);
-
       expect(response.status).toBe(200);
       expect(response.body.success).toBeTruthy();
     });
