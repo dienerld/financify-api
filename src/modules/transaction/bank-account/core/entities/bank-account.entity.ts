@@ -1,6 +1,7 @@
 import { ulid } from 'ulid';
 
 import { BaseEntity, BaseEntityProps } from '@/common/base/base.entity';
+import { DomainException } from '@/common/exception/domain.exception';
 
 interface BankAccountEntityProps {
   name: string;
@@ -22,9 +23,7 @@ export class BankAccount extends BaseEntity {
     Object.assign(this, data);
   }
 
-  static createNew(
-    data: Omit<CreateBankAccountProps, 'id' | 'createdAt' | 'updatedAt'>,
-  ): BankAccount {
+  static createNew(data: BankAccountEntityProps): BankAccount {
     const id = ulid();
     return new BankAccount({
       ...data,
@@ -41,8 +40,27 @@ export class BankAccount extends BaseEntity {
     return new BankAccount(data);
   }
 
-  update(data: Partial<BankAccountEntityProps>): void {
-    Object.assign(this, data);
+  changeName(name: BankAccountEntityProps['name']): void {
+    this.name = name;
+  }
+
+  deposit(value: number): void {
+    if (value <= 0) {
+      throw new DomainException('O valor do depósito deve ser maior que zero.');
+    }
+    this.balance += value;
+  }
+
+  withdraw(value: number): void {
+    if (value <= 0) {
+      throw new DomainException('O valor do saque deve ser maior que zero.');
+    }
+
+    if (value > this.balance) {
+      throw new DomainException('Saldo insuficiente.');
+    }
+
+    this.balance -= value;
   }
 
   getName(): BankAccountEntityProps['name'] {
@@ -65,7 +83,6 @@ export class BankAccount extends BaseEntity {
       balance: this.balance,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      excluded: this.excluded,
       disabled: this.disabled,
       blocked: this.blocked,
     };
